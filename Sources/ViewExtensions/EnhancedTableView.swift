@@ -8,7 +8,8 @@ import UIKit
 public class EnhancedTableView: UITableView {
     public var selfSizing = true
     public var dynamicHeaderSize = true
-    
+    public var dynamicFooterSize = true
+
     public override func didMoveToSuperview() {
         if selfSizing {
             isScrollEnabled = false
@@ -24,7 +25,14 @@ public class EnhancedTableView: UITableView {
                 header.frame.size.height = size.height
             }
         }
-        
+
+        if dynamicFooterSize, let footer = tableFooterView {
+            let size = footer.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+            if footer.frame.size.height != size.height {
+                footer.frame.size.height = size.height
+            }
+        }
+
         super.layoutSubviews()
     }
 
