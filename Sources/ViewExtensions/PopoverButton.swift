@@ -5,6 +5,8 @@
 
 import UIKit
 
+/// UIButton which shows a popover when tapped.
+
 @available(iOS 13.0, *) open class PopoverButton: UIButton {
     public typealias ViewConstructor = () -> UIViewController
     
@@ -25,7 +27,7 @@ import UIKit
         super.init(coder: coder)
     }
     
-    func updateIcon() {
+    open func updateIcon() {
         if let name = systemIconName {
             setImage(UIImage(systemName: name), for: .normal)
         }
