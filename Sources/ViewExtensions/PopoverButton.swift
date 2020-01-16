@@ -50,6 +50,6 @@ import UIKit
 
 @available(iOS 13.0, *) extension PopoverButton: UIPopoverPresentationControllerDelegate {
     public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-        return .popover
+        return .none
     }
 }
