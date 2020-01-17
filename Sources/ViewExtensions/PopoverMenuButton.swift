@@ -21,20 +21,18 @@ extension String: MenuItem {
 
 @available(iOS 13.0, *) open class PopoverMenuButton: PopoverButton {
     public typealias SelectionBlock = (MenuItem) -> ()
+    let items: [MenuItem]
 
     class ItemTable: UITableViewController {
-        let items: [MenuItem]
-        let selectionBlock: SelectionBlock
+        let button: PopoverMenuButton!
 
-        init(items: [MenuItem], onSelect selectionBlock: @escaping SelectionBlock) {
-            self.items = items
-            self.selectionBlock = selectionBlock
+        init(button: PopoverMenuButton) {
+            self.button = button
             super.init(style: .plain)
         }
         
         required init?(coder: NSCoder) {
-            self.items = []
-            selectionBlock = { (MenuItem) in }
+            self.button = nil
             super.init(coder: coder)
         }
 
@@ -52,14 +50,15 @@ extension String: MenuItem {
                 super.preferredContentSize = newValue
             }
         }
-        
+
         override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return items.count
+            return button.items.count
         }
         
         override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = tableView.dequeueReusableCell(withIdentifier: "item")!
             let index = indexPath.row
+            let items = button.items
             if index < items.count {
                 cell.textLabel?.text = items[index].menuItemLabel
             }
@@ -68,8 +67,9 @@ extension String: MenuItem {
         
         override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             let index = indexPath.row
+            let items = button.items
             if index < items.count {
-                self.selectionBlock(items[index])
+                button.select(item: items[index])
             }
             dismiss(animated: true) {
                 
@@ -77,10 +77,20 @@ extension String: MenuItem {
         }
     }
 
-    public convenience init(items: [MenuItem], systemIconName: String, onSelect selectionBlock: @escaping SelectionBlock) {
-        self.init(viewConstructor: {
-            return ItemTable(items: items, onSelect: selectionBlock)
-        }, systemIconName: systemIconName)
+    public init(items: [MenuItem], systemIconName: String) {
+        self.items = items
+        super.init(systemIconName: systemIconName)
     }
     
+    public required init?(coder: NSCoder) {
+        self.items = []
+        super.init(coder: coder)
+    }
+    
+    open override func constructView() -> UIViewController {
+        return ItemTable(button: self)
+    }
+    
+    open func select(item: MenuItem) {
+    }
 }

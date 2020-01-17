@@ -8,13 +8,9 @@ import UIKit
 /// UIButton which shows a popover when tapped.
 
 @available(iOS 13.0, *) open class PopoverButton: UIButton {
-    public typealias ViewConstructor = () -> UIViewController
-    
-    let viewConstructor: ViewConstructor?
     let systemIconName: String?
     
-    public init(viewConstructor: @escaping ViewConstructor, systemIconName: String? = nil) {
-        self.viewConstructor = viewConstructor
+    public init(systemIconName: String? = nil) {
         self.systemIconName = systemIconName
         super.init(frame: .zero)
         updateIcon()
@@ -22,9 +18,12 @@ import UIKit
     }
     
     public required init?(coder: NSCoder) {
-        viewConstructor = nil
         systemIconName = nil
         super.init(coder: coder)
+    }
+    
+    open func constructView() -> UIViewController? {
+        return nil
     }
     
     open func updateIcon() {
@@ -34,7 +33,7 @@ import UIKit
     }
     
     @IBAction func doTapped(_ sender: Any) {
-        if let content = viewConstructor?() {
+        if let content = constructView() {
             content.modalPresentationStyle = .popover
             if let popover = content.popoverPresentationController {
                 popover.delegate = self
