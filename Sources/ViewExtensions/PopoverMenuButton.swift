@@ -37,15 +37,20 @@ extension String: MenuItem {
             selectionBlock = { (MenuItem) in }
             super.init(coder: coder)
         }
-        
-        override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-            let padding = CGFloat(16.0)
-            let itemCount = self.tableView(tableView, numberOfRowsInSection: 0)
-            let itemHeight = CGFloat(32.0)
-            let height = padding + (CGFloat(itemCount + 1) * itemHeight)
-            tableView.register(UITableViewCell.self, forCellReuseIdentifier: "item")
-            self.preferredContentSize = CGSize(width: 0, height: height)
+
+        override var preferredContentSize: CGSize {
+            get {
+                let padding = CGFloat(16.0)
+                let itemCount = self.tableView(tableView, numberOfRowsInSection: 0)
+                let itemHeight = CGFloat(32.0)
+                let height = padding + (CGFloat(itemCount + 1) * itemHeight)
+                tableView.register(UITableViewCell.self, forCellReuseIdentifier: "item")
+                return CGSize(width: 0, height: height)
+            }
+            
+            set {
+                super.preferredContentSize = newValue
+            }
         }
         
         override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
