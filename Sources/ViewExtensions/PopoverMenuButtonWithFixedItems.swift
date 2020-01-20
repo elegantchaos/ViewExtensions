@@ -41,7 +41,7 @@ import UIKit
 
 /// Protocol which items in the array must conform to.
 
-public protocol MenuItem {
+@available(iOS 13.0, *) public protocol MenuItem {
     func label(for menu: PopoverMenuButton) -> String
     func identifier(for menu: PopoverMenuButton) -> String
     func accessoryType(for menu: PopoverMenuButton) -> UITableViewCell.AccessoryType
@@ -49,7 +49,7 @@ public protocol MenuItem {
 
 /// Menu Item protocol implementation for String.
 
-extension String: MenuItem {
+@available(iOS 13.0, *) extension String: MenuItem {
     public func label(for menu: PopoverMenuButton) -> String { return self }
     public func identifier(for menu: PopoverMenuButton) -> String { return self }
     public func accessoryType(for menu: PopoverMenuButton) -> UITableViewCell.AccessoryType { return .none }
