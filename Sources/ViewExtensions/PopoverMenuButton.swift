@@ -5,23 +5,12 @@
 
 import UIKit
 
-public protocol MenuItem {
-    var menuItemLabel: String { get }
-    var menuItemIdentifier: String { get }
-}
-
-extension String: MenuItem {
-    public var menuItemLabel: String { return self}
-    public var menuItemIdentifier: String { return self }
-}
-
 /// Subclass of `PopoverButton` which shows a menu in a popover.
 /// The menu consists of a vertical stack of items presented in a table.
 /// If not all items will fit in the available space, the table will scroll.
 
 @available(iOS 13.0, *) open class PopoverMenuButton: PopoverButton {
     public typealias SelectionBlock = (MenuItem) -> ()
-    let items: [MenuItem]
 
     class ItemTable: UITableViewController {
         let button: PopoverMenuButton!
@@ -52,24 +41,20 @@ extension String: MenuItem {
         }
 
         override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return button.items.count
+            return button.itemCount()
         }
         
         override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = tableView.dequeueReusableCell(withIdentifier: "item")!
-            let index = indexPath.row
-            let items = button.items
-            if index < items.count {
-                cell.textLabel?.text = items[index].menuItemLabel
+            if let item = button.item(at: indexPath.row) {
+                button.configure(cell: cell, for: item)
             }
             return cell
         }
         
         override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            let index = indexPath.row
-            let items = button.items
-            if index < items.count {
-                button.select(item: items[index])
+            if let item = button.item(at: indexPath.row) {
+                button.select(item: item)
             }
             dismiss(animated: true) {
                 
@@ -77,13 +62,11 @@ extension String: MenuItem {
         }
     }
 
-    public init(items: [MenuItem], systemIconName: String) {
-        self.items = items
+    public init(systemIconName: String) {
         super.init(systemIconName: systemIconName)
     }
     
     public required init?(coder: NSCoder) {
-        self.items = []
         super.init(coder: coder)
     }
     
@@ -91,6 +74,19 @@ extension String: MenuItem {
         return ItemTable(button: self)
     }
     
-    open func select(item: MenuItem) {
+    open func itemCount() -> Int {
+        return 0
+    }
+
+    open func item(at row: Int) -> Any? {
+        return nil
+    }
+
+    open func configure(cell: UITableViewCell, for item: Any) {
+        cell.textLabel?.text = "<item>"
+    }
+    
+    open func select(item: Any) {
     }
 }
+
