@@ -12,12 +12,34 @@ import UIKit
 @available(iOS 13.0, *) open class PopoverMenuButton: PopoverButton {
     public typealias SelectionBlock = (MenuItem) -> ()
 
+    let label: String?
+    
     class ItemTable: UITableViewController {
         let button: PopoverMenuButton!
+        var padding = CGFloat(0)
 
-        init(button: PopoverMenuButton) {
+        init(button: PopoverMenuButton, label: String? = nil) {
             self.button = button
             super.init(style: .plain)
+            tableView.register(UITableViewCell.self, forCellReuseIdentifier: "item")
+            tableView.separatorStyle = .none
+            tableView.rowHeight = 32.0
+            
+            if let label = label {
+                let stack = UIStackView(axis: .horizontal)
+                stack.isLayoutMarginsRelativeArrangement = true
+                stack.directionalLayoutMargins.leading = 8.0
+                stack.directionalLayoutMargins.top = 8.0
+                let header = UILabel()
+                header.isEnabled = false
+                header.text = label
+                header.sizeToFit()
+                header.font = UIFont.preferredFont(forTextStyle: .footnote)
+                stack.addArrangedSubview(header)
+                stack.bounds.size.height = header.bounds.size.height + stack.directionalLayoutMargins.top
+                padding = stack.bounds.size.height
+                tableView.tableHeaderView = stack
+            }
         }
         
         required init?(coder: NSCoder) {
@@ -27,11 +49,8 @@ import UIKit
 
         override var preferredContentSize: CGSize {
             get {
-                let padding = CGFloat(16.0)
                 let itemCount = self.tableView(tableView, numberOfRowsInSection: 0)
-                let itemHeight = CGFloat(32.0)
-                let height = padding + (CGFloat(itemCount + 1) * itemHeight)
-                tableView.register(UITableViewCell.self, forCellReuseIdentifier: "item")
+                let height = padding + (CGFloat(itemCount) * tableView.rowHeight)
                 return CGSize(width: 0, height: height)
             }
             
@@ -62,16 +81,18 @@ import UIKit
         }
     }
 
-    public init(systemIconName: String) {
+    public init(systemIconName: String, label: String? = nil) {
+        self.label = label
         super.init(systemIconName: systemIconName)
     }
     
     public required init?(coder: NSCoder) {
+        self.label = nil
         super.init(coder: coder)
     }
     
     open override func constructView() -> UIViewController {
-        return ItemTable(button: self)
+        return ItemTable(button: self, label: self.label)
     }
     
     open func itemCount() -> Int {
