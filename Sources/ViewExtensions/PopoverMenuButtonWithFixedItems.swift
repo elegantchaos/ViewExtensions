@@ -3,6 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+#if targetEnvironment(macCatalyst) || !os(macOS)
 import UIKit
 
 /// Subclass of `PopoverMenuButton` which takes a fixed array of items to display.
@@ -54,3 +55,4 @@ import UIKit
     public func identifier(for menu: PopoverMenuButton) -> String { return self }
     public func accessoryType(for menu: PopoverMenuButton) -> UITableViewCell.AccessoryType { return .none }
 }
+#endif

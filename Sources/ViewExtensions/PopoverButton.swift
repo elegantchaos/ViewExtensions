@@ -3,6 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+#if targetEnvironment(macCatalyst) || !os(macOS)
 import UIKit
 
 /// UIButton which shows a popover when tapped.
@@ -54,3 +55,4 @@ import UIKit
         return .none
     }
 }
+#endif

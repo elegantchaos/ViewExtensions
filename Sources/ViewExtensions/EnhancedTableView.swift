@@ -3,6 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+#if targetEnvironment(macCatalyst) || !os(macOS)
 import UIKit
 
 public class EnhancedTableView: UITableView {
@@ -41,3 +42,4 @@ public class EnhancedTableView: UITableView {
     }
     
 }
+#endif

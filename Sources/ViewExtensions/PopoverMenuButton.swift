@@ -3,6 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+#if targetEnvironment(macCatalyst) || !os(macOS)
 import UIKit
 
 /// Subclass of `PopoverButton` which shows a menu in a popover.
@@ -110,4 +111,4 @@ import UIKit
     open func select(item: Any) {
     }
 }
-
+#endif
