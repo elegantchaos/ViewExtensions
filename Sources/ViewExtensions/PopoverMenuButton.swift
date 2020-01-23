@@ -14,7 +14,8 @@ import UIKit
     public typealias SelectionBlock = (MenuItem) -> ()
 
     let label: String?
-    
+    let spacing: CGFloat
+
     class ItemTable: UITableViewController {
         let button: PopoverMenuButton!
         var padding = CGFloat(0)
@@ -29,8 +30,8 @@ import UIKit
             if let label = label {
                 let stack = UIStackView(axis: .horizontal)
                 stack.isLayoutMarginsRelativeArrangement = true
-                stack.directionalLayoutMargins.leading = 8.0
-                stack.directionalLayoutMargins.top = 8.0
+                stack.directionalLayoutMargins.leading = button.spacing
+                stack.directionalLayoutMargins.top = button.spacing
                 let header = UILabel()
                 header.isEnabled = false
                 header.text = label
@@ -82,13 +83,15 @@ import UIKit
         }
     }
 
-    public init(systemIconName: String, label: String? = nil) {
+    public init(systemIconName: String, label: String? = nil, spacing: CGFloat = 8.0) {
         self.label = label
+        self.spacing = spacing
         super.init(systemIconName: systemIconName)
     }
     
     public required init?(coder: NSCoder) {
         self.label = nil
+        self.spacing = 0
         super.init(coder: coder)
     }
     
