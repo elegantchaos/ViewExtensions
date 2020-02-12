@@ -1,15 +1,20 @@
 import XCTest
 @testable import ViewExtensions
 
-final class ViewExtensionsTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(ViewExtensions().text, "Hello, World!")
-    }
+#if canImport(UIKit)
+import UIKit
+#endif
 
-    static var allTests = [
-        ("testExample", testExample),
-    ]
+final class ViewExtensionsTests: XCTestCase {
+    func testFindViewController() {
+        #if canImport(UIKit)
+        let vc = UIViewController()
+        let view1 = UIView()
+        let view2 = UIView()
+        vc.view.addSubview(view1)
+        view1.addSubview(view2)
+        let found = view2.findViewController()
+        XCTAssertTrue(found === vc)
+        #endif
+    }
 }
